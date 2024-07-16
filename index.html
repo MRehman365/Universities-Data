@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>University</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        // Function to fetch data based on country
+        function fetchCountryData() {
+            let country = document.getElementById("searchInput").value; // Get the country name from input
+            let url = `http://universities.hipolabs.com/search?country=${country}`;
+
+            fetch(url)
+                .then(response => response.json()) // Parse response as JSON
+                .then(data => displayResults(data)) // Call displayResults function with data
+                .catch(error => console.error('Error fetching data:', error));
+        }
+
+        // Function to display results
+        function displayResults(data) {
+            let resultContainer = document.getElementById("resultContainer");
+            resultContainer.innerHTML = ""; // Clear previous results
+
+            if (data.length === 0) {
+                resultContainer.innerHTML = "No results found";
+                return;
+            }
+
+            // Create a list of universities
+            let universitiesList = document.createElement("ol");
+            universitiesList.className = "universities-list";
+
+            data.forEach(university => {
+                let listItem = document.createElement("li");
+                let link = document.createElement("a");
+                link.textContent = university.name;
+                link.href = university.web_pages[0]; // Assuming the first web page link is used
+                link.target = "_blank"; // Open link in a new tab
+                listItem.appendChild(link);
+                universitiesList.appendChild(listItem);
+            });
+
+            resultContainer.appendChild(universitiesList);
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Lato:100&display=swap');
+
+        body {
+            height: 95vh;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        .search-bar {
+            margin-bottom: 10px;
+            display: flex;
+            height: 60px;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            position: fixed;
+            top: 10%;
+            background-color:  #91C788;
+            z-index: 1;
+        }
+
+        input {
+            border: none;
+            border-radius: 5px;
+            height: 40px;
+            width: 75%;
+            background-color: white;
+            font-size: 20px;
+            font-family: arial;
+            font-weight: bold;
+            text-align: center;
+        }
+        button{
+            background-color: #91C788;
+            width: 70px;
+            height: 40px;
+            border-radius: 5px;
+            color: white;
+            border: 2px solid white;
+            font-size: 15px;
+            font-family: arial;
+            box-shadow: 0px 0px 55px white;
+        }
+
+
+        .universities-list {
+            width: 100%;
+            padding: 0;
+        }
+        .universities-list ol{
+           display: flex;
+           width: 100%;
+            
+            font-size: 18px;
+            font-family: sans-serif;
+            color: #333;
+            border: 2px solid #333;
+            z-index: 1;
+
+        }
+
+        .universities-list li {
+            text-align: center;
+            height: 40px;
+            line-height: 40px;
+            color: #333;
+            border: 2px solid #333;
+            position: relative;
+            transition: all .35s;
+            margin-bottom: 5px;
+            text-decoration: none;
+            font-family: Helvetica;
+            font-style: normal;
+
+        }
+        .universities-list li:hover {
+            /* display: flex; */
+            /* justify-content: center; */
+            height: 40px;
+            line-height: 40px;
+            color: #333;
+            background-color: #DDFFBC;
+            border: 2px solid #333;
+            position: relative;
+            transition: all .35s;
+            margin-bottom: 5px;
+            text-decoration: none;
+            font-family: Helvetica;
+            font-style: normal;
+
+        }
+
+        .universities-list a {
+            margin-bottom: 5px;
+            text-decoration: none;
+            font-family: Helvetica;
+            font-style: normal;
+            color: black;
+            font-size: 15px;
+
+
+        }
+
+        #resultContainer {
+            position: fixed;
+            background-color: rgb(255, 255, 255);
+            margin-top: 70px;
+            display: flex;
+            justify-content: center;
+            height: 90vh;
+            width: 100%;
+            overflow: auto;
+
+        }
+        h1{
+
+            text-align: center;
+            
+            font-family: arial;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Check Universities in Your Country</h1>
+
+    <!-- Search bar -->
+    <div class="search-bar">
+        <input type="text" id="searchInput" placeholder="Enter country name" value="India">
+        <button onclick="fetchCountryData()">Search</button>
+
+    </div>
+
+    <!-- Container to display results -->
+    <div id="resultContainer">
+
+    </div>
+
+</body>
+
+</html>
